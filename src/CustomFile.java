@@ -1,12 +1,12 @@
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.vfs.VirtualFile;
 
-class CustomEditor {
+class CustomFile {
     private final VirtualFile file;
 
     private boolean keepOpen;
 
-    CustomEditor(VirtualFile file) {
+    CustomFile(VirtualFile file) {
         this.file = file;
     }
 

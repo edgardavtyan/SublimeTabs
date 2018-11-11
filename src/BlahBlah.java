@@ -1,81 +1,65 @@
-import com.intellij.diff.tools.util.KeyboardModifierListener;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.KeyboardGestureAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
-import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.WeakPropertyChangeAdapter;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class BlahBlah implements FileEditorManagerListener, ApplicationComponent, TypedActionHandler {
-    private MessageBusConnection c;
-    private FileEditor prevEditor;
-    private VirtualFile prevFile;
+public class BlahBlah implements FileEditorManagerListener, ApplicationComponent {
+    private MessageBusConnection connection;
+    private FileEditor savedEditor;
+    private VirtualFile savedFile;
 
-    private HashMap<VirtualFile, CustomEditor> editorsFiles;
+    private HashMap<VirtualFile, CustomFile> filesMap;
 
     public BlahBlah() {
-        c = ApplicationManager.getApplication().getMessageBus().connect();
-        editorsFiles = new HashMap<>();
+        connection = ApplicationManager.getApplication().getMessageBus().connect();
+        filesMap = new HashMap<>();
     }
 
     public void onSaveActionPreformed() {
-        editorsFiles.get(prevFile).setKeepOpen(true);
+        filesMap.get(savedFile).setKeepOpen(true);
     }
 
     @Override
     public void initComponent() {
-        c.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, this);
+        connection.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, this);
     }
 
     @Override
     public void disposeComponent() {
-        c.disconnect();
+        connection.disconnect();
     }
 
     @Override
     public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-        if (prevEditor == null || prevFile == null) {
-            prevEditor = source.getSelectedEditor();
-            prevFile = file;
+        if (savedEditor == null || savedFile == null) {
+            savedEditor = source.getSelectedEditor();
+            savedFile = file;
             return;
         }
 
-        if (prevEditor.isModified()) {
-            editorsFiles.get(prevFile).setKeepOpen(true);
+        if (savedEditor.isModified()) {
+            filesMap.get(savedFile).setKeepOpen(true);
         }
 
-        for (CustomEditor value : editorsFiles.values()) {
-            if (!value.isKeepOpen()) {
-                source.closeFile(value.getFile());
+        for (CustomFile customFile : filesMap.values()) {
+            if (!customFile.isKeepOpen()) {
+                source.closeFile(customFile.getFile());
             }
         }
 
-        editorsFiles.put(file, new CustomEditor(file));
-        prevEditor = source.getSelectedEditor();
-        prevFile = file;
+        filesMap.put(file, new CustomFile(file));
+        savedEditor = source.getSelectedEditor();
+        savedFile = file;
     }
 
     @Override
     public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-        editorsFiles.remove(file);
-    }
-
-    @Override
-    public void execute(@NotNull Editor editor, char c, @NotNull DataContext dataContext) {
-
+        filesMap.remove(file);
     }
 }
