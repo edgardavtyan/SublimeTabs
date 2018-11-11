@@ -38,7 +38,7 @@ public class BlahBlah implements FileEditorManagerListener, ApplicationComponent
     @Override
     public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
         if (savedEditor == null || savedFile == null) {
-            savedEditor = source.getSelectedEditor();
+            savedEditor = source.getSelectedEditor(file);
             savedFile = file;
             return;
         }
@@ -54,7 +54,7 @@ public class BlahBlah implements FileEditorManagerListener, ApplicationComponent
         }
 
         filesMap.put(file, new CustomFile(file));
-        savedEditor = source.getSelectedEditor();
+        savedEditor = source.getSelectedEditor(file);
         savedFile = file;
     }
 
