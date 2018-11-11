@@ -30,6 +30,8 @@
 
   <actions>
 
+      <action id="SaveAction" class="SaveAction" text="SaveAction" use-shortcut-of="SaveAll">
+      </action>
   </actions>
 
   <application-components>

@@ -1,9 +1,14 @@
 import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.vfs.VirtualFile;
 
 class CustomEditor {
-    private final FileEditor editor;
+    private final VirtualFile file;
 
     private boolean keepOpen;
+
+    CustomEditor(VirtualFile file) {
+        this.file = file;
+    }
 
     public boolean isKeepOpen() {
         return keepOpen;
@@ -13,7 +18,7 @@ class CustomEditor {
         this.keepOpen = keepOpen;
     }
 
-    CustomEditor(FileEditor editor) {
-        this.editor = editor;
+    public VirtualFile getFile() {
+        return file;
     }
 }

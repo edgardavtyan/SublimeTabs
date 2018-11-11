@@ -14,10 +14,11 @@ import com.intellij.util.WeakPropertyChangeAdapter;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class BlahBlah implements FileEditorManagerListener, ApplicationComponent, TypedActionHandler {
     private MessageBusConnection c;
@@ -29,6 +30,10 @@ public class BlahBlah implements FileEditorManagerListener, ApplicationComponent
     public BlahBlah() {
         c = ApplicationManager.getApplication().getMessageBus().connect();
         editorsFiles = new HashMap<>();
+    }
+
+    public void onSaveActionPreformed() {
+        editorsFiles.get(prevFile).setKeepOpen(true);
     }
 
     @Override
@@ -51,11 +56,15 @@ public class BlahBlah implements FileEditorManagerListener, ApplicationComponent
 
         if (prevEditor.isModified()) {
             editorsFiles.get(prevFile).setKeepOpen(true);
-        } else {
-            source.closeFile(this.prevFile);
         }
 
-        editorsFiles.put(file, new CustomEditor(source.getSelectedEditor()));
+        for (CustomEditor value : editorsFiles.values()) {
+            if (!value.isKeepOpen()) {
+                source.closeFile(value.getFile());
+            }
+        }
+
+        editorsFiles.put(file, new CustomEditor(file));
         prevEditor = source.getSelectedEditor();
         prevFile = file;
     }
