@@ -9,14 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-public class BlahBlah implements FileEditorManagerListener, ApplicationComponent {
+public class Main implements FileEditorManagerListener, ApplicationComponent {
     private MessageBusConnection connection;
     private FileEditor savedEditor;
     private VirtualFile savedFile;
 
     private HashMap<VirtualFile, CustomFile> filesMap;
 
-    public BlahBlah() {
+    public Main() {
         connection = ApplicationManager.getApplication().getMessageBus().connect();
         filesMap = new HashMap<>();
     }

@@ -5,7 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 public class SaveAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
-        BlahBlah blah = ApplicationManager.getApplication().getComponent(BlahBlah.class);
+        Main blah = ApplicationManager.getApplication().getComponent(Main.class);
         blah.onSaveActionPreformed();
     }
 }
