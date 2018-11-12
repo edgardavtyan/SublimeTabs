@@ -44,7 +44,9 @@ public class Main implements FileEditorManagerListener, ApplicationComponent {
         }
 
         if (savedEditor.isModified()) {
-            filesMap.get(savedFile).setKeepOpen(true);
+            if (filesMap.containsKey(savedFile)) {
+                filesMap.get(savedFile).setKeepOpen(true);
+            }
         }
 
         for (CustomFile customFile : filesMap.values()) {
