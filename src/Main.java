@@ -3,6 +3,8 @@ import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
+import com.intellij.openapi.fileEditor.FileEditorProvider;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +38,11 @@ public class Main implements FileEditorManagerListener, ApplicationComponent {
     }
 
     @Override
-    public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
+    public void fileOpenedSync(
+            @NotNull FileEditorManager source,
+            @NotNull VirtualFile file,
+            @NotNull Pair<FileEditor[],
+            FileEditorProvider[]> editors) {
         if (savedEditor == null || savedFile == null) {
             savedEditor = source.getSelectedEditor(file);
             savedFile = file;
