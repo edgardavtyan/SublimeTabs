@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.ed.sublimetabs</id>
   <name>SublimeTabs</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 
   <description><![CDATA[
       Sublime Text tabs behavior for IntelliJ IDEA
@@ -9,6 +9,7 @@
 
   <change-notes><![CDATA[
       0.1.0: First half-working version
+      0.1.1: Fix ConcurrentModificationException
     ]]>
   </change-notes>
 
